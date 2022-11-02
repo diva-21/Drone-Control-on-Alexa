@@ -16,7 +16,8 @@ AWS Lambda is a serverless, event-driven compute service that lets you run code 
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. You can use Amazon DynamoDB to create a database table that can store and retrieve any amount of data, and serve any level of request traffic.
 
 
-
+## ITS STILL UNDER DEVELOPMENT
+### PROGRESS: Made the connections from Alexa Lambda to Functional Responsiveness and WebSocket API Gateway is built.API is under test model to thake To and Fro messages from GroundStation and User/Client
 
 ## Screenshots
 <img width="960" alt="2022-10-26 (1)" src="https://user-images.githubusercontent.com/81960004/197892876-c7e9ff9d-0def-4968-a7d0-a28b8c73283a.png">
