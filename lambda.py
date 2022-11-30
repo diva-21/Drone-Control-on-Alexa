@@ -172,7 +172,18 @@ def get_welcome_response():
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def get_wrong_response():
+    session_attributes = {}
+    card_title = "Welcome"
+    speech_output = "Please give a valid command to drone"
+    # If the user either does not reply to the welcome message or says something
+    # that is not understood, they will be prompted again with this text.
+    reprompt_text = "give valid command to your custom alexa application!"
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
+    
 def handle_session_end_request():
     card_title = "Session Ended"
     speech_output = "Thank you for trying the Alexa Skills Kit sample. " \
@@ -219,6 +230,8 @@ def on_intent(intent_request, session):
         return get_rtl()
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
+    elif intent_name == "AMAZON.FallbackIntent":
+        return get_wrong_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
     else:
@@ -350,6 +363,14 @@ def handle_message(table, connection_id, event_body, apig_management_client):
     for other_conn_id in connection_ids:
         try:
             if other_conn_id != connection_id:
+                if event_body['sender']=='gs':
+                    dynamodb = boto3.resource('dynamodb')
+                    table = dynamodb.Table('status')
+                    response = table.put_item(
+                    Item={
+                        'time': "now",
+                        'present_status' : event_body['message']
+                    })
                 send_response = apig_management_client.post_to_connection(
                     Data=message, ConnectionId=other_conn_id)
                 logger.info(
